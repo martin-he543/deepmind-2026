@@ -1,0 +1,6 @@
+{
+  "name": "PaleoSwitch — Ancient Viral Gene Switch Atlas",
+  "description": "Virtual knockout workbench using AlphaGenome regulatory predictions, 3D chromatin loop reconstruction, and Gemini synthesis to discover which endogenous retroviruses (ERVs) still switch human genes on.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
