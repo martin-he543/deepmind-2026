@@ -1,0 +1,339 @@
+{
+  "modelName": "RetroSwitch-XGB (5-Fold GroupCV by Gene Locus)",
+  "numSamples": 140,
+  "numLoci": 20,
+  "aurocSeqOnly": 0.747,
+  "aurocFullHybrid": 0.824,
+  "pearsonR": 0.412,
+  "maeLog2FC": 0.246,
+  "featureColumns": [
+    "dist_to_tss_kb",
+    "div_pct",
+    "ltr_len_bp",
+    "gc_pct",
+    "cpg_oe",
+    "kmer_entropy",
+    "motif_density",
+    "lineage_motif_score",
+    "tata_motif",
+    "is_erv1",
+    "is_malr",
+    "wt_h3k27ac_ltr",
+    "wt_atac_ltr",
+    "wt_contact"
+  ],
+  "featureImportances": [
+    {
+      "key": "dist_to_tss_kb",
+      "label": "Distance to Gene TSS (kb)",
+      "importance": 19.7
+    },
+    {
+      "key": "kmer_entropy",
+      "label": "4-mer Sequence Complexity",
+      "importance": 15.0
+    },
+    {
+      "key": "ltr_len_bp",
+      "label": "Viral LTR Length (bp)",
+      "importance": 13.6
+    },
+    {
+      "key": "wt_contact",
+      "label": "3D Loop Contact Probability",
+      "importance": 7.8
+    },
+    {
+      "key": "div_pct",
+      "label": "Viral Divergence % (Evolutionary Age)",
+      "importance": 7.5
+    },
+    {
+      "key": "cpg_oe",
+      "label": "CpG Observed/Expected Ratio",
+      "importance": 6.8
+    },
+    {
+      "key": "motif_density",
+      "label": "Total TF Motif Density (/kb)",
+      "importance": 6.6
+    },
+    {
+      "key": "lineage_motif_score",
+      "label": "Lineage TF Motifs (STAT1/GATA/OCT4)",
+      "importance": 5.8
+    },
+    {
+      "key": "wt_atac_ltr",
+      "label": "Open Chromatin (DNase/ATAC)",
+      "importance": 5.8
+    },
+    {
+      "key": "gc_pct",
+      "label": "Sequence GC Content (%)",
+      "importance": 4.8
+    }
+  ],
+  "locusPredictions": [
+    {
+      "id": "LTR_001_ERVW1",
+      "gene": "ERVW-1",
+      "ltrName": "LTR17 (ERV1)",
+      "tissue": "Placenta",
+      "distKb": 0.1,
+      "divPct": 6.1,
+      "switchProbSeqOnlyPct": 62.9,
+      "switchProbFullPct": 88.1,
+      "predLog2FC": -0.873,
+      "actualLog2FC": -1.734,
+      "actualZ": -10.82
+    },
+    {
+      "id": "LTR_002_HERVH_LTR7",
+      "gene": "ESRG",
+      "ltrName": "LTR7 (ERV1)",
+      "tissue": "Embryonic Stem Cell",
+      "distKb": 0.1,
+      "divPct": 3.8,
+      "switchProbSeqOnlyPct": 53.6,
+      "switchProbFullPct": 14.0,
+      "predLog2FC": -1.125,
+      "actualLog2FC": -0.598,
+      "actualZ": -3.76
+    },
+    {
+      "id": "LTR_003_CSF1R_THE1B",
+      "gene": "CSF1R",
+      "ltrName": "THE1B (ERVL-MaLR)",
+      "tissue": "Monocyte / Macrophage",
+      "distKb": 6.1,
+      "divPct": 12.3,
+      "switchProbSeqOnlyPct": 1.8,
+      "switchProbFullPct": 5.2,
+      "predLog2FC": -0.05,
+      "actualLog2FC": -0.041,
+      "actualZ": -0.27
+    },
+    {
+      "id": "LTR_004_AMY1C_ERV1",
+      "gene": "AMY1C",
+      "ltrName": "LTR2B (ERV1)",
+      "tissue": "Salivary Gland",
+      "distKb": 0.5,
+      "divPct": 10.2,
+      "switchProbSeqOnlyPct": 46.4,
+      "switchProbFullPct": 59.7,
+      "predLog2FC": -0.69,
+      "actualLog2FC": -0.214,
+      "actualZ": -1.34
+    },
+    {
+      "id": "LTR_005_AIM2_MER41B",
+      "gene": "AIM2",
+      "ltrName": "MER41E (ERV1)",
+      "tissue": "Monocyte / Macrophage",
+      "distKb": 0.5,
+      "divPct": 29.0,
+      "switchProbSeqOnlyPct": 69.0,
+      "switchProbFullPct": 25.6,
+      "predLog2FC": -0.374,
+      "actualLog2FC": -0.68,
+      "actualZ": -4.26
+    },
+    {
+      "id": "LTR_006_PRODH_HERVK",
+      "gene": "PRODH",
+      "ltrName": "LTR5_Hs (ERVK)",
+      "tissue": "Brain Cortex",
+      "distKb": 2.9,
+      "divPct": 2.1,
+      "switchProbSeqOnlyPct": 32.5,
+      "switchProbFullPct": 11.3,
+      "predLog2FC": -0.106,
+      "actualLog2FC": -0.127,
+      "actualZ": -0.81
+    },
+    {
+      "id": "LTR_007_GAPDH_MLT1K",
+      "gene": "GAPDH",
+      "ltrName": "LTR10D (ERV1)",
+      "tissue": "Liver",
+      "distKb": 26.7,
+      "divPct": 14.9,
+      "switchProbSeqOnlyPct": 8.7,
+      "switchProbFullPct": 1.2,
+      "predLog2FC": -0.075,
+      "actualLog2FC": -0.02,
+      "actualZ": -0.13
+    },
+    {
+      "id": "LTR_008_GBP2_LTR12C",
+      "gene": "GBP2",
+      "ltrName": "LTR12C (ERV1)",
+      "tissue": "Monocyte / Macrophage",
+      "distKb": 1.7,
+      "divPct": 8.3,
+      "switchProbSeqOnlyPct": 48.2,
+      "switchProbFullPct": 6.7,
+      "predLog2FC": -0.091,
+      "actualLog2FC": -0.3,
+      "actualZ": -1.88
+    },
+    {
+      "id": "LTR_009_CYP19A1_LTR",
+      "gene": "CYP19A1",
+      "ltrName": "MER21A (ERVL)",
+      "tissue": "Placenta",
+      "distKb": 0.1,
+      "divPct": 18.3,
+      "switchProbSeqOnlyPct": 41.9,
+      "switchProbFullPct": 33.2,
+      "predLog2FC": -0.678,
+      "actualLog2FC": -4.644,
+      "actualZ": -29.01
+    },
+    {
+      "id": "LTR_010_IL2RB_LTR",
+      "gene": "IL2RB",
+      "ltrName": "THE1D (ERVL-MaLR)",
+      "tissue": "Monocyte / Macrophage",
+      "distKb": 25.1,
+      "divPct": 11.1,
+      "switchProbSeqOnlyPct": 35.4,
+      "switchProbFullPct": 3.2,
+      "predLog2FC": -0.204,
+      "actualLog2FC": 0.042,
+      "actualZ": 0.25
+    },
+    {
+      "id": "LTR_011_APOC1_LTR",
+      "gene": "APOC1",
+      "ltrName": "LTR2 (ERV1)",
+      "tissue": "Liver",
+      "distKb": 0.4,
+      "divPct": 7.0,
+      "switchProbSeqOnlyPct": 45.0,
+      "switchProbFullPct": 37.1,
+      "predLog2FC": -0.52,
+      "actualLog2FC": -0.226,
+      "actualZ": -1.42
+    },
+    {
+      "id": "LTR_012_BAAT_LTR",
+      "gene": "BAAT",
+      "ltrName": "MER11A (ERVK)",
+      "tissue": "Liver",
+      "distKb": 0.4,
+      "divPct": 12.0,
+      "switchProbSeqOnlyPct": 54.5,
+      "switchProbFullPct": 47.6,
+      "predLog2FC": -0.17,
+      "actualLog2FC": -1.612,
+      "actualZ": -10.08
+    },
+    {
+      "id": "LTR_013_NOS3_LTR",
+      "gene": "NOS3",
+      "ltrName": "LTR5 (ERVK)",
+      "tissue": "Placenta",
+      "distKb": 36.5,
+      "divPct": 8.1,
+      "switchProbSeqOnlyPct": 61.1,
+      "switchProbFullPct": 51.5,
+      "predLog2FC": -0.235,
+      "actualLog2FC": -0.218,
+      "actualZ": -1.35
+    },
+    {
+      "id": "LTR_014_PEG10_LTR",
+      "gene": "PEG10",
+      "ltrName": "LTR37B (ERV1)",
+      "tissue": "Placenta",
+      "distKb": 43.1,
+      "divPct": 26.8,
+      "switchProbSeqOnlyPct": 1.9,
+      "switchProbFullPct": 1.4,
+      "predLog2FC": -0.04,
+      "actualLog2FC": -0.002,
+      "actualZ": 0.0
+    },
+    {
+      "id": "LTR_015_STAT1_LTR",
+      "gene": "STAT1",
+      "ltrName": "MER50 (ERV1)",
+      "tissue": "Monocyte / Macrophage",
+      "distKb": 22.3,
+      "divPct": 16.3,
+      "switchProbSeqOnlyPct": 13.1,
+      "switchProbFullPct": 3.2,
+      "predLog2FC": -0.073,
+      "actualLog2FC": -0.004,
+      "actualZ": -0.03
+    },
+    {
+      "id": "LTR_016_IFI6_LTR",
+      "gene": "IFI6",
+      "ltrName": "MER21B (ERVL)",
+      "tissue": "Monocyte / Macrophage",
+      "distKb": 1.4,
+      "divPct": 15.4,
+      "switchProbSeqOnlyPct": 23.7,
+      "switchProbFullPct": 36.9,
+      "predLog2FC": -0.285,
+      "actualLog2FC": 0.057,
+      "actualZ": 0.35
+    },
+    {
+      "id": "LTR_017_NANOG_LTR",
+      "gene": "NANOG",
+      "ltrName": "LTR12E (ERV1)",
+      "tissue": "Embryonic Stem Cell",
+      "distKb": 37.4,
+      "divPct": 10.1,
+      "switchProbSeqOnlyPct": 42.2,
+      "switchProbFullPct": 15.5,
+      "predLog2FC": -0.138,
+      "actualLog2FC": -0.13,
+      "actualZ": -0.83
+    },
+    {
+      "id": "LTR_018_POU5F1_LTR",
+      "gene": "POU5F1",
+      "ltrName": "LTR102_Mam (ERVL)",
+      "tissue": "Embryonic Stem Cell",
+      "distKb": 7.8,
+      "divPct": 22.8,
+      "switchProbSeqOnlyPct": 3.4,
+      "switchProbFullPct": 1.1,
+      "predLog2FC": -0.015,
+      "actualLog2FC": -0.101,
+      "actualZ": -0.65
+    },
+    {
+      "id": "LTR_019_SYN1_LTR",
+      "gene": "SYN1",
+      "ltrName": "LTR16 (ERVL)",
+      "tissue": "Brain Cortex",
+      "distKb": 5.0,
+      "divPct": 20.8,
+      "switchProbSeqOnlyPct": 2.3,
+      "switchProbFullPct": 2.1,
+      "predLog2FC": -0.015,
+      "actualLog2FC": -0.018,
+      "actualZ": -0.12
+    },
+    {
+      "id": "LTR_020_ACTB_NULL",
+      "gene": "ACTB",
+      "ltrName": "MLT1C2 (ERVL-MaLR)",
+      "tissue": "Liver",
+      "distKb": 37.9,
+      "divPct": 27.5,
+      "switchProbSeqOnlyPct": 60.5,
+      "switchProbFullPct": 26.4,
+      "predLog2FC": -0.076,
+      "actualLog2FC": -0.008,
+      "actualZ": -0.06
+    }
+  ]
+}
