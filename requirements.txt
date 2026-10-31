@@ -1,0 +1,8 @@
+biopandas
+numpy
+pandas
+matplotlib
+seaborn
+bedtools
+getfasta
+streamlit
