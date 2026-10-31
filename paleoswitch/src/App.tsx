@@ -246,7 +246,9 @@ export default function App() {
                   disabled={demoStepIndex === GUIDED_DEMO_STEPS.length - 1}
                   className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white text-xs font-bold inline-flex items-center gap-1 shadow-md cursor-pointer"
                 >
-                  Next Step ({ Math.min(6, demoStepIndex + 2) }/6){' '}
+                  {demoStepIndex < GUIDED_DEMO_STEPS.length - 1
+                    ? `Next: Step ${demoStepIndex + 2} of 6`
+                    : 'Step 6 of 6 (Done)'}{' '}
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -298,6 +300,7 @@ export default function App() {
               onToggleDeleteVirus={() => setIsVirusDeleted((d) => !d)}
               externalPerturbMode={activeStep.perturbMode3D}
               externalCameraFocus={activeStep.cameraFocus3D}
+              demoStepTrigger={demoStepIndex}
             />
           ) : (
             <div className="bg-white rounded-2xl p-4 text-slate-900">

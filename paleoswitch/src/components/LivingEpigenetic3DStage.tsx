@@ -31,6 +31,7 @@ interface LivingEpigenetic3DStageProps {
   onToggleDeleteVirus: () => void;
   externalPerturbMode?: PerturbationMode3D;
   externalCameraFocus?: CameraFocus3D;
+  demoStepTrigger?: number;
 }
 
 export const LivingEpigenetic3DStage: React.FC<LivingEpigenetic3DStageProps> = ({
@@ -40,6 +41,7 @@ export const LivingEpigenetic3DStage: React.FC<LivingEpigenetic3DStageProps> = (
   onToggleDeleteVirus,
   externalPerturbMode,
   externalCameraFocus,
+  demoStepTrigger = 0,
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const [glowModality, setGlowModality] =
@@ -59,13 +61,15 @@ export const LivingEpigenetic3DStage: React.FC<LivingEpigenetic3DStageProps> = (
     } else {
       setPerturbMode(isVirusDeleted ? 'delta_ltr' : 'wt');
     }
-  }, [externalPerturbMode, isVirusDeleted]);
-
-  useEffect(() => {
     if (externalCameraFocus) {
       setCameraFocus(externalCameraFocus);
     }
-  }, [externalCameraFocus]);
+    if (externalPerturbMode === 'delta_ltr') {
+      stateRef.current.shatterLtrTimer = 1.0;
+    } else if (externalPerturbMode === 'ctrl_alu') {
+      stateRef.current.shatterAluTimer = 1.0;
+    }
+  }, [externalPerturbMode, externalCameraFocus, isVirusDeleted, demoStepTrigger]);
 
   const metrics = locus.tissueMetrics[tissue];
   const tracks = useMemo(
