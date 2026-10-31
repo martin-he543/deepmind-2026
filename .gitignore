@@ -15,3 +15,7 @@ __pycache__/
 
 # Data (downloaded from NCBI, large; see README)
 data/
+
+# Machine-specific certificate bundle
+.certs/
+scripts/export_windows_roots.py

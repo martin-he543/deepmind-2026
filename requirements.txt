@@ -1,5 +1,6 @@
 numpy
 pandas
+pyarrow
 scipy
 scikit-learn
 xgboost
@@ -8,10 +9,11 @@ seaborn
 biopython
 biopandas
 pyfaidx
-pybedtools
+pybedtools; sys_platform != "win32"  # needs pysam, which does not build on Windows
 torch
 transformers
 google-genai
 streamlit
 alphagenome
 python-dotenv
+tenacity
