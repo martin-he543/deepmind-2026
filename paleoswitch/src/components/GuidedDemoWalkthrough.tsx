@@ -32,18 +32,20 @@ export interface DemoStepConfig {
   threeMode: ThreeSceneMode;
   perturbMode3D: PerturbationMode3D;
   cameraFocus3D: CameraFocus3D;
+  activeMainView: '3d_stage' | 'our_model';
+  modelSubTab?: 'xgboost_model' | 'alphagenome_npz';
   scrollTargetId: string;
 }
 
 export const GUIDED_DEMO_STEPS: DemoStepConfig[] = [
   {
     stepNumber: 1,
-    title: 'Why AlphaGenome Changes Everything: 8% of Our DNA is Ancient Virus',
-    subtitle: 'Step 1 of 6 · AlphaGenome 131 kb Sequence-to-Function Oracle',
+    title: 'The Mystery: 8% of Human DNA is Ancient Virus — AlphaGenome Turns It Into a 3D Lab',
+    subtitle: 'Step 1 of 6 (0:00–0:20) · Intact Wild-Type 3D Loop & Hi-C Floor',
     narrative:
-      'About 8% of the human genome (~700,000 elements) comes from ancient retroviruses (ERVs). RepeatMasker only tells us WHERE they sit—not which ones still work. By feeding 131 kb GRCh38 DNA sequences into Google DeepMind’s AlphaGenome, we predict 1-bp RNA-seq, CAGE, ATAC, H3K27ac, and 3D Hi-C contact maps simultaneously. Here in Placenta, watch LTR17 actively loop to ERVW-1 (Syncytin-1) above the glowing 3D Hi-C contact mountain.',
+      '8% of our genome (~700,000 elements) comes from ancient retroviruses (ERVs). RepeatMasker only finds where they sit, not which ones still switch human genes on. Using Google DeepMind’s AlphaGenome (131 kb context), we predict 1-bp RNA-seq, CAGE, ATAC, H3K27ac, and 3D Hi-C contact maps simultaneously. Here in Placenta, watch LTR17 actively pulse energy across the 3D loop into Syncytin-1 (ERVW-1).',
     keyTakeaway:
-      'Impact: AlphaGenome turns 700,000 static viral annotations into a live, multi-modal 3D functional genomics oracle.',
+      'Impact: AlphaGenome replaces months of wet-lab CRISPR screening with an instant 3D sequence-to-function oracle.',
     locusId: 'LTR_HG38_001_ERVW1',
     tissue: 'Placenta (Trophoblast)',
     isVirusDeleted: false,
@@ -51,16 +53,17 @@ export const GUIDED_DEMO_STEPS: DemoStepConfig[] = [
     threeMode: 'chromatin_loop',
     perturbMode3D: 'wt',
     cameraFocus3D: 'macro_loop',
-    scrollTargetId: 'section-3d-stage',
+    activeMainView: '3d_stage',
+    scrollTargetId: 'top',
   },
   {
     stepNumber: 2,
-    title: 'Zoom Inside the Virus: 3D DNA Double Helix & Transcription Factor Docking',
-    subtitle: 'Step 2 of 6 · Base-Resolution Motif Dissection',
+    title: 'Zoom Inside the Virus: 3D DNA Double Helix & 1-bp TF Motif Mutation',
+    subtitle: 'Step 2 of 6 (0:20–0:40) · Base-Resolution Motif Dissection',
     narrative:
-      'The camera now flies inside the 780 bp viral LTR17 sequence. Inside its 3D DNA double helix sit conserved GCM1 and GATA2/3 transcription factor binding sites originally evolved by the ancient retrovirus to hijack host cells. Click "2. 1-bp Motif SNV" below to mutate a single nucleotide inside the viral helix and watch the TF protein detach and gene output drop by ~55%.',
+      'Clicking Next flies the camera inside the 780 bp viral LTR17 sequence. Inside its 3D DNA double helix sit conserved GCM1 and GATA2/3 binding motifs. Because AlphaGenome predicts at 1-bp resolution, mutating a single nucleotide inside the viral motif flashes crimson, detaches the transcription factor dimer, and cuts mRNA output to 68%.',
     keyTakeaway:
-      'Impact: AlphaGenome has 1-bp resolution—it resolves single-nucleotide mutations inside viral TF binding motifs.',
+      'Impact: Resolves single-nucleotide variants (SNVs) inside viral regulatory motifs in 3D.',
     locusId: 'LTR_HG38_001_ERVW1',
     tissue: 'Placenta (Trophoblast)',
     isVirusDeleted: false,
@@ -68,16 +71,17 @@ export const GUIDED_DEMO_STEPS: DemoStepConfig[] = [
     threeMode: 'chromatin_loop',
     perturbMode3D: 'motif_snv',
     cameraFocus3D: 'viral_helix',
-    scrollTargetId: 'section-3d-stage',
+    activeMainView: '3d_stage',
+    scrollTargetId: 'top',
   },
   {
     stepNumber: 3,
-    title: 'In-Silico CRISPR Excision: Shattering the Viral Switch & Unwinding the Loop',
-    subtitle: 'Step 3 of 6 · Full ΔLTR Virtual Knockout & Hi-C Collapse',
+    title: 'Full In-Silico CRISPR Excision: Shattering the Virus & Unwinding the 3D Loop',
+    subtitle: 'Step 3 of 6 (0:40–1:00) · ΔLTR Knockout & Hi-C Mountain Collapse',
     narrative:
-      'Now we perform a full in-silico CRISPR excision of the 780 bp LTR17 element (padding the outer flank to keep the ERVW-1 TSS anchored). Watch the 3D loop physically unwind away from the cyan Ghost WT Blueprint, the 3D Hi-C contact mountain underneath flatten (4.18 → 1.12 O/E), and the nascent mRNA fountain drop by 69.9% (log2FC = -1.73, Z = -10.82σ).',
+      'Now we excise the entire 780 bp LTR17 virus in silico (padding the outer flank to keep the ERVW-1 TSS anchored). Watch the viral switch shatter into 40 fragments, the 3D loop physically unwind away from the cyan Ghost WT Blueprint, the 3D Hi-C contact mountain flatten (4.18 → 1.12 O/E), and placental Syncytin-1 expression drop by 70% (log2FC = -1.73, Z = -10.82σ).',
     keyTakeaway:
-      'Impact: Virtual knockouts test causal enhancer function in seconds before spending months on wet-lab CRISPR.',
+      'Impact: Proves causal gene-switch activity in silico before wet-lab CRISPR validation.',
     locusId: 'LTR_HG38_001_ERVW1',
     tissue: 'Placenta (Trophoblast)',
     isVirusDeleted: true,
@@ -85,16 +89,17 @@ export const GUIDED_DEMO_STEPS: DemoStepConfig[] = [
     threeMode: 'chromatin_loop',
     perturbMode3D: 'delta_ltr',
     cameraFocus3D: 'macro_loop',
-    scrollTargetId: 'section-3d-stage',
+    activeMainView: '3d_stage',
+    scrollTargetId: 'top',
   },
   {
     stepNumber: 4,
-    title: 'Specificity Proof: Deleting Nearby Alu/L1 Control Repeats Does Nothing',
-    subtitle: 'Step 4 of 6 · Mandatory Repeat & Random Null Controls',
+    title: 'Specificity Proof: Cutting Nearby Alu/L1 Control Repeats Leaves the Loop Intact',
+    subtitle: 'Step 4 of 6 (1:00–1:20) · Mandatory Repeat & Random Null Controls',
     narrative:
-      'How do we know AlphaGenome isn’t just reacting to ANY sequence deletion? Here we excise a matched 666 bp L1/Alu repeat in the exact same window ("5. Cut Alu Control"). Watch the amber control repeat shatter on the right flank while the viral enhancer-promoter loop, 3D Hi-C peak, and mRNA stream stay 100% intact (log2FC = +0.014).',
+      'How do we prove AlphaGenome isn’t just reacting to any deletion? Here we excise a matched 666 bp L1M5/Alu control repeat in the same window. Watch the yellow control node shatter on the right flank while the viral loop, 3D Hi-C mountain, and green mRNA stream stay 100% intact (log2FC = +0.014, empirical p = 2.8e-27).',
     keyTakeaway:
-      'Impact: Benchmarking against Alu/L1 and random deletions proves statistical specificity (empirical p = 2.8e-27).',
+      'Impact: Benchmarking against Alu/L1 and random non-repeat deletions eliminates false positives.',
     locusId: 'LTR_HG38_001_ERVW1',
     tissue: 'Placenta (Trophoblast)',
     isVirusDeleted: false,
@@ -102,33 +107,36 @@ export const GUIDED_DEMO_STEPS: DemoStepConfig[] = [
     threeMode: 'chromatin_loop',
     perturbMode3D: 'ctrl_alu',
     cameraFocus3D: 'macro_loop',
-    scrollTargetId: 'section-3d-stage',
+    activeMainView: '3d_stage',
+    scrollTargetId: 'top',
   },
   {
     stepNumber: 5,
-    title: 'Innate Immunity & Onco-Exaptation: MER41 Wiring Human Macrophages',
-    subtitle: 'Step 5 of 6 · Tissue-Specific Viral Rewiring (AIM2 & CSF1R)',
+    title: 'Our Trained ML Model (RetroSwitch-XGB): 0.824 AUROC & Live DNA Sandbox',
+    subtitle: 'Step 5 of 6 (1:20–1:42) · Predicting Active Viral Switches Genome-Wide',
     narrative:
-      'Switching to CD14+ Monocytes/Macrophages at AIM2 (chr1), an ancient 45-MYA MER41 retrovirus supplies STAT1/IRF1 interferon motifs. Applying CRISPRi epigenetic silencing ("3. dCas9-KRAB") cages the virus in heterochromatin and collapses AIM2 expression (-37.6%, Z = -4.26σ)—reproducing Chuong et al. (Science 2016) purely in silico.',
+      'Querying AlphaGenome’s 131 kb oracle on all 700,000 human ERVs is expensive. So we trained our own XGBoost + Random Forest model (RetroSwitch-XGB) on GRCh38 FASTA sequence motifs (STAT1, GATA, OCT4, TATA, CpG ratio, 4-mer entropy), viral divergence, TSS distance, and chromatin. In 5-fold cross-validation grouped by gene, DNA sequence features alone reach 0.747 AUROC, rising to 0.824 AUROC in our full hybrid model.',
     keyTakeaway:
-      'Impact: Explains how ancient viral switches wire human immunity and get hijacked in cancer (CSF1R/THE1B).',
-    locusId: 'LTR_HG38_005_AIM2_MER41B',
-    tissue: 'Monocyte / Macrophage (CD14+)',
+      'Impact: Fast, interpretable XGBoost screening trained directly on AlphaGenome virtual knockouts.',
+    locusId: 'LTR_HG38_008_CYP19A1_MER21A',
+    tissue: 'Placenta (Trophoblast)',
     isVirusDeleted: true,
     recenterOnTss: true,
     threeMode: 'chromatin_loop',
-    perturbMode3D: 'crispri_krab',
+    perturbMode3D: 'delta_ltr',
     cameraFocus3D: 'macro_loop',
-    scrollTargetId: 'section-3d-stage',
+    activeMainView: 'our_model',
+    modelSubTab: 'xgboost_model',
+    scrollTargetId: 'top',
   },
   {
     stepNumber: 6,
-    title: 'Scientific Honesty: Young HERV-K Mappability & The 240-LTR Tissue Atlas',
-    subtitle: 'Step 6 of 6 · Known Model Blind Spots & Genome-Wide Scale',
+    title: '81 Live AlphaGenome Calls (.npz Cache), 0.0000 Determinism & Tissue Heatmap',
+    subtitle: 'Step 6 of 6 (1:42–2:00) · Verified Pipeline Outputs & Epistemic Honesty',
     narrative:
-      'Finally, we test a young human-specific HERV-K (LTR5_Hs, 2.1% divergence) near PRODH in Brain Cortex. Because young LTR5_Hs copies are nearly identical across hg38, short-read ENCODE training data has mappability blind spots—so AlphaGenome predicts an attenuated delta (-0.13 log2FC). Scroll down to explore the full ERV Family × Tissue Matrix and Gemini co-scientist.',
+      'Here are the static validation figures and gRPC request logs from our 81 live AlphaGenome 131 kb API calls across 20 GRCh38 loci (with 0.000000 reference determinism noise). We also highlight known blind spots—such as young HERV-K (LTR5_Hs, 2.1% div) elements where short-read mappability limits attenuate ENCODE training signal.',
     keyTakeaway:
-      'Impact: Combines AlphaGenome’s predictive power with rigorous epistemic honesty about short-read training limits.',
+      'Impact: End-to-end reproducible pipeline (ltrs.parquet + raw/*.npz + RetroSwitch-XGB) ready for target discovery.',
     locusId: 'LTR_HG38_006_SLC1A2_HERVK',
     tissue: 'Brain Motor Cortex',
     isVirusDeleted: true,
@@ -136,7 +144,9 @@ export const GUIDED_DEMO_STEPS: DemoStepConfig[] = [
     threeMode: 'contact_surface',
     perturbMode3D: 'delta_ltr',
     cameraFocus3D: 'macro_loop',
-    scrollTargetId: 'section-3d-stage',
+    activeMainView: 'our_model',
+    modelSubTab: 'alphagenome_npz',
+    scrollTargetId: 'top',
   },
 ];
 
@@ -175,9 +185,9 @@ export const GuidedDemoWalkthrough: React.FC<GuidedDemoWalkthroughProps> = ({
     <div className="fixed bottom-4 right-4 z-50 w-[min(460px,94vw)] bg-slate-900 text-white border border-slate-700 rounded-xl shadow-xl p-4">
       <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
         <div className="flex items-center gap-2 text-xs font-mono text-teal-400 font-semibold">
-          <span>ALPHAGENOME GUIDED WALKTHROUGH</span>
+          <span>2-MINUTE LIVE PITCH CONTROLLER</span>
           <span aria-hidden="true">·</span>
-          <span>{step.subtitle}</span>
+          <span>Step {step.stepNumber}/6</span>
         </div>
         <button
           type="button"

@@ -11,16 +11,23 @@ import {
 
 interface OurPredictionsAndModelSectionProps {
   onSelectLocusId?: (id: string) => void;
+  externalTab?: 'xgboost_model' | 'alphagenome_npz';
 }
 
 export const OurPredictionsAndModelSection: React.FC<
   OurPredictionsAndModelSectionProps
-> = ({ onSelectLocusId }) => {
+> = ({ onSelectLocusId, externalTab }) => {
   const [data, setData] = useState<any>(null);
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'xgboost_model' | 'alphagenome_npz'>(
-    'xgboost_model'
+    externalTab || 'xgboost_model'
   );
+
+  useEffect(() => {
+    if (externalTab) {
+      setActiveTab(externalTab);
+    }
+  }, [externalTab]);
 
   // Live Sandbox State
   const [sbxDna, setSbxDna] = useState<string>(
