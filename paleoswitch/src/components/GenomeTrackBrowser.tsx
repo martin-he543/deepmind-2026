@@ -331,7 +331,7 @@ export const GenomeTrackBrowser: React.FC<GenomeTrackBrowserProps> = ({
       {/* Interactive SVG Multi-Track Canvas */}
       <div className="mt-3 relative overflow-x-auto">
         <svg
-          viewBox={`0 0 ${svgWidth} 375`}
+          viewBox={`0 0 ${svgWidth} 390`}
           className="w-full h-auto select-none cursor-crosshair bg-slate-50/60 rounded-lg border border-slate-200"
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
@@ -350,9 +350,9 @@ export const GenomeTrackBrowser: React.FC<GenomeTrackBrowserProps> = ({
           {/* Highlight Vertical Band for ERV LTR */}
           <rect
             x={ltrXStart - 3}
-            y={12}
+            y={10}
             width={Math.max(10, ltrXEnd - ltrXStart + 6)}
-            height={348}
+            height={366}
             fill={isVirusDeleted ? '#FEE2E2' : '#CCFBF1'}
             opacity={0.65}
           />
@@ -360,123 +360,139 @@ export const GenomeTrackBrowser: React.FC<GenomeTrackBrowserProps> = ({
           {/* Highlight Vertical Line for Target Gene TSS */}
           <line
             x1={tssX}
-            y1={12}
+            y1={10}
             x2={tssX}
-            y2={358}
+            y2={376}
             stroke="#1D4ED8"
             strokeWidth={1.5}
             strokeDasharray="3 3"
           />
 
           {/* Top Annotation Track: RepeatMasker LTR + Control Regions + Gene Exons */}
-          <g transform="translate(0, 14)">
-            <text
-              x={12}
-              y={16}
-              className="text-[11px] font-semibold fill-slate-700"
-            >
-              Annotations (hg38)
-            </text>
-            <text
-              x={12}
-              y={30}
-              className="text-[10px] font-mono fill-slate-400"
-            >
-              rm.out + Ensembl
-            </text>
+          {(() => {
+            const ltrMidX = (ltrXStart + ltrXEnd) / 2;
+            const randBelow = Math.abs(ctrlRandomX - ltrMidX) < 95;
+            const repBelow =
+              Math.abs(ctrlRepeatX - ltrMidX) < 95 ||
+              (!randBelow && Math.abs(ctrlRepeatX - ctrlRandomX) < 75);
+            const tssNearOtherBelow =
+              (randBelow && Math.abs(tssX - ctrlRandomX) < 90) ||
+              (repBelow && Math.abs(tssX - ctrlRepeatX) < 90);
 
-            {/* Backbone line */}
-            <line
-              x1={padLeft}
-              y1={20}
-              x2={svgWidth - padRight}
-              y2={20}
-              stroke="#CBD5E1"
-              strokeWidth={1.5}
-            />
+            return (
+              <g transform="translate(0, 12)">
+                <text
+                  x={12}
+                  y={18}
+                  className="text-[11px] font-semibold fill-slate-700"
+                >
+                  Annotations (hg38)
+                </text>
+                <text
+                  x={12}
+                  y={32}
+                  className="text-[10px] font-mono fill-slate-400"
+                >
+                  rm.out + Ensembl
+                </text>
 
-            {/* Control 1: Random Non-Repeat Region */}
-            <rect
-              x={ctrlRandomX - 4}
-              y={13}
-              width={10}
-              height={14}
-              rx={2}
-              fill="#94A3B8"
-            />
-            <text
-              x={ctrlRandomX}
-              y={9}
-              textAnchor="middle"
-              className="text-[9px] font-mono fill-slate-500"
-            >
-              Ctrl:Random
-            </text>
-
-            {/* Control 2: Non-ERV Repeat (Alu/L1) */}
-            <rect
-              x={ctrlRepeatX - 4}
-              y={13}
-              width={10}
-              height={14}
-              rx={2}
-              fill="#64748B"
-            />
-            <text
-              x={ctrlRepeatX}
-              y={9}
-              textAnchor="middle"
-              className="text-[9px] font-mono fill-slate-500"
-            >
-              Ctrl:Alu/L1
-            </text>
-
-            {/* Viral ERV LTR Element Box */}
-            <rect
-              x={ltrXStart - 2}
-              y={10}
-              width={Math.max(12, ltrXEnd - ltrXStart + 4)}
-              height={20}
-              rx={3}
-              fill={isVirusDeleted ? '#EF4444' : '#0D9488'}
-            />
-            <text
-              x={(ltrXStart + ltrXEnd) / 2}
-              y={8}
-              textAnchor="middle"
-              className="text-[10px] font-mono font-semibold fill-teal-900"
-            >
-              {isVirusDeleted ? `Δ ${locus.repeatName} (Excised)` : locus.repeatName}
-            </text>
-
-            {/* Target Gene Exons */}
-            {locus.exons.map((ex) => {
-              const exX1 = coordToX(Math.min(ex.start, ex.end));
-              const exX2 = Math.max(exX1 + 7, coordToX(Math.max(ex.start, ex.end)));
-              return (
-                <rect
-                  key={ex.number}
-                  x={exX1}
-                  y={12}
-                  width={exX2 - exX1}
-                  height={16}
-                  rx={2}
-                  fill="#1D4ED8"
+                {/* Backbone line */}
+                <line
+                  x1={padLeft}
+                  y1={22}
+                  x2={svgWidth - padRight}
+                  y2={22}
+                  stroke="#CBD5E1"
+                  strokeWidth={1.5}
                 />
-              );
-            })}
-            <text
-              x={tssX + 6}
-              y={10}
-              className="text-[10px] font-mono font-semibold fill-blue-800"
-            >
-              {locus.nearestGene} TSS ({locus.strand})
-            </text>
-          </g>
+
+                {/* Control 1: Random Non-Repeat Region */}
+                <rect
+                  x={ctrlRandomX - 4}
+                  y={15}
+                  width={9}
+                  height={14}
+                  rx={2}
+                  fill="#94A3B8"
+                />
+                <text
+                  x={ctrlRandomX}
+                  y={randBelow ? 41 : 9}
+                  textAnchor="middle"
+                  className="text-[9px] font-mono fill-slate-500"
+                >
+                  Ctrl:Random
+                </text>
+
+                {/* Control 2: Non-ERV Repeat (Alu/L1) */}
+                <rect
+                  x={ctrlRepeatX - 4}
+                  y={15}
+                  width={9}
+                  height={14}
+                  rx={2}
+                  fill="#64748B"
+                />
+                <text
+                  x={ctrlRepeatX}
+                  y={repBelow ? 41 : 9}
+                  textAnchor="middle"
+                  className="text-[9px] font-mono fill-slate-500"
+                >
+                  Ctrl:Alu/L1
+                </text>
+
+                {/* Target Gene Exons */}
+                {locus.exons.map((ex) => {
+                  const exX1 = coordToX(Math.min(ex.start, ex.end));
+                  const exX2 = Math.max(exX1 + 7, coordToX(Math.max(ex.start, ex.end)));
+                  return (
+                    <rect
+                      key={ex.number}
+                      x={exX1}
+                      y={14}
+                      width={exX2 - exX1}
+                      height={16}
+                      rx={2}
+                      fill="#1D4ED8"
+                    />
+                  );
+                })}
+
+                {/* Viral ERV LTR Element Box (Label always ABOVE backbone at y=8) */}
+                <rect
+                  x={ltrXStart - 2}
+                  y={12}
+                  width={Math.max(12, ltrXEnd - ltrXStart + 4)}
+                  height={20}
+                  rx={3}
+                  fill={isVirusDeleted ? '#EF4444' : '#0D9488'}
+                />
+                <text
+                  x={ltrMidX}
+                  y={8}
+                  textAnchor="middle"
+                  className="text-[10px] font-mono font-semibold fill-teal-900"
+                >
+                  {isVirusDeleted ? `Δ ${locus.repeatName} (Excised)` : locus.repeatName}
+                </text>
+
+                {/* Target Gene TSS Label (Always BELOW backbone at y=42 so it never collides with LTR) */}
+                <text
+                  x={tssNearOtherBelow ? tssX - 8 : tssX}
+                  y={42}
+                  textAnchor={tssNearOtherBelow ? 'end' : 'middle'}
+                  className="text-[10px] font-mono font-semibold fill-blue-800"
+                >
+                  ▲ {locus.nearestGene} TSS ({locus.strand})
+                </text>
+              </g>
+            );
+          })()}
 
           {/* 5 Quantitative AlphaGenome Modality Tracks */}
           {tracksConfig.map((trk, idx) => {
-            const yTop = 58 + idx * 60;
+            const yTop = 72 + idx * 60;
             const baselineY = yTop + trackHeight;
 
             return (

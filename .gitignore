@@ -14,4 +14,4 @@ __pycache__/
 .vscode/
 
 # Data (downloaded from NCBI, large; see README)
-data/
+/data/
