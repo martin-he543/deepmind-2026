@@ -292,7 +292,7 @@
           <div class="flex items-center gap-2">
             <span class="text-base">✨</span>
             <div>
-              <h2 class="text-xs font-bold uppercase tracking-wider text-white mono">Gemini 2.5 Grounded Synthesis</h2>
+              <h2 class="text-xs font-bold uppercase tracking-wider text-white mono">Gemini Grounded Synthesis</h2>
               <p class="text-[10px] text-slate-400">Strictly constrained to AlphaGenome JSON output</p>
             </div>
           </div>
@@ -1570,3 +1570,215 @@
           <div class="flex items-center justify-between text-[11px] text-slate-400 mono">
             <span>${loc.ltrName} (${loc.family})</span>
             <span class="${tData.zScore < -3 ? 'text-rose-400 font-semibold' : 'text-slate-400'}">Z = ${tData.zScore}σ</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /***************************************************************************
+     * 7. INTERACTION HANDLERS
+     ***************************************************************************/
+    function refreshAll() {
+      const loc = state.currentLocus;
+      const t = loc.tissues[state.currentTissue];
+      const sel = document.getElementById("tissueSelect");
+      sel.innerHTML = Object.keys(loc.tissues).map((k) => `<option value="${k}" ${k === state.currentTissue ? "selected" : ""}>${k}</option>`).join("");
+
+      document.getElementById("trackTissueBadge").textContent = state.currentTissue;
+      document.getElementById("trackCoordSubtitle").textContent =
+        `${loc.chrom}:${loc.start.toLocaleString()}-${loc.end.toLocaleString()} (${loc.contigNcbi} mapped) • Re-centered on ${loc.gene} TSS`;
+      document.getElementById("metricLog2FC").textContent = t.log2FC.toFixed(2);
+      document.getElementById("metricZScore").textContent = `${t.zScore.toFixed(2)}σ`;
+      const pv = document.getElementById("pValBadge");
+      pv.textContent = `p = ${t.pVal}`;
+      pv.className = `text-[10px] mono px-2 py-0.5 rounded border ${t.pVal < 0.01
+        ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+        : "bg-slate-700/40 text-slate-300 border-slate-600"}`;
+
+      const ko = state.experimentMode === "KO";
+      const cb = document.getElementById("contactDeltaBadge");
+      cb.textContent = ko ? `Loop ${Math.round((1 - t.contactScoreKo / t.contactScoreWt) * 100)}% lost` : "Loop Intact";
+      const badge = document.getElementById("coordShiftBadge");
+      badge.textContent = ko ? "Alt: LTR excised + re-centered" : state.experimentMode === "WT" ? "Ref Intact" : "Control deletion";
+      document.getElementById("shiftBpLabel").textContent = ko || state.experimentMode.startsWith("CONTROL") ? `Δ-${state.experimentMode === "CONTROL_ALU" ? loc.aluLenBp : loc.ltrLenBp} bp` : "Δ0 bp";
+      document.getElementById("padBpSpan").textContent = ko ? `+${loc.ltrLenBp} bp` : "+0 bp";
+
+      const modes = { WT: "btnModeWT", KO: "btnModeKO", CONTROL_ALU: "btnModeALU", CONTROL_RAND: "btnModeRAND" };
+      Object.entries(modes).forEach(([m, id]) => {
+        document.getElementById(id).classList.toggle("ring-2", m === state.experimentMode);
+        document.getElementById(id).classList.toggle("ring-cyan-400/60", m === state.experimentMode);
+      });
+      document.getElementById("quickKoText").textContent = ko ? "Restore Virus" : "Delete Virus in 3D";
+      document.getElementById("quickKoIcon").textContent = ko ? "↩️" : "✂️";
+
+      const cav = document.getElementById("caveatBanner");
+      cav.textContent = loc.caveatText;
+      const cls = loc.caveatLevel === "SAFE" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-200"
+        : loc.caveatLevel === "WARN" ? "bg-amber-500/10 border-amber-500/30 text-amber-200"
+        : "bg-slate-500/10 border-slate-500/30 text-slate-300";
+      cav.className = `p-2.5 rounded-lg border text-[11px] leading-snug ${cls}`;
+
+      document.getElementById("geminiJsonPre").textContent = JSON.stringify(buildGeminiPayload(), null, 2);
+      renderLocusList();
+      renderCanned();
+      drawGenomeTracks();
+      drawContactMap();
+      drawNullDistribution();
+      rebuild3DScene();
+    }
+
+    function md(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>')
+        .replace(/`(.+?)`/g, '<code class="mono text-cyan-300">$1</code>');
+    }
+
+    function renderCanned() {
+      const s = state.currentLocus.geminiSummary[state.experimentMode];
+      document.getElementById("geminiOutputBox").innerHTML =
+        `<p>${md(s)}</p><p class="text-[10px] mono text-slate-500">Cached summary • ask a question below for a live Gemini answer.</p>`;
+    }
+
+    function selectLocus(id) {
+      state.currentLocus = LOCI_DATA.find((l) => l.id === id);
+      state.currentTissue = state.currentLocus.defaultTissue;
+      refreshAll();
+    }
+
+    function filterLoci(tag) {
+      state.filterTag = tag;
+      document.querySelectorAll("#familyFilterBar button").forEach((b) => {
+        const on = b.dataset.filter === tag;
+        b.classList.toggle("bg-slate-700", on);
+        b.classList.toggle("text-white", on);
+      });
+      renderLocusList();
+    }
+
+    function setExperimentMode(mode) {
+      state.experimentMode = mode;
+      state.targetAnimProgress = mode === "KO" ? 1 : 0;
+      playSoundEffect(mode === "KO" ? "KO" : "WT");
+      refreshAll();
+    }
+
+    function toggleQuickKnockout() {
+      setExperimentMode(state.experimentMode === "KO" ? "WT" : "KO");
+    }
+
+    function onTissueChange(t) {
+      state.currentTissue = t;
+      refreshAll();
+    }
+
+    const toggleModal = (id) => document.getElementById(id).classList.toggle("hidden");
+    function toggleApiModal() { toggleModal("apiModal"); }
+    function toggleJsonPayload() { document.getElementById("geminiJsonPre").classList.toggle("hidden"); }
+
+    function toggleHeatmapModal() {
+      const m = document.getElementById("heatmapModal");
+      m.classList.toggle("hidden");
+      if (m.classList.contains("hidden")) return;
+      const cell = (z, id) => {
+        const a = Math.min(1, Math.abs(z) / 7);
+        const color = z < -1.5 ? `rgba(244,63,94,${0.15 + a * 0.7})` : `rgba(51,65,85,${0.3 + a * 0.3})`;
+        return `<td class="p-0"><button onclick="toggleHeatmapModal(); selectLocus('${id}')" class="w-full px-3 py-2.5 mono text-xs text-white hover:ring-1 hover:ring-cyan-400" style="background:${color}">${z.toFixed(1)}</button></td>`;
+      };
+      document.getElementById("heatmapTableContainer").innerHTML = `
+        <table class="w-full text-xs border-separate border-spacing-0.5">
+          <thead><tr><th class="text-left text-slate-400 p-2">ERV family</th>${HEATMAP_TISSUES.map((t) => `<th class="text-slate-400 p-2 mono font-medium">${t}</th>`).join("")}</tr></thead>
+          <tbody>${HEATMAP_FAMILIES.map((f) => `<tr><td class="p-2 text-slate-200 whitespace-nowrap">${f.family} <span class="text-slate-500 mono">${f.age}</span></td>${f.scores.map((z) => cell(z, f.locusId)).join("")}</tr>`).join("")}</tbody>
+        </table>`;
+    }
+
+    /***************************************************************************
+     * 8. GEMINI (live Q&A grounded in the AlphaGenome JSON payload)
+     ***************************************************************************/
+    function buildGeminiPayload() {
+      const l = state.currentLocus, t = l.tissues[state.currentTissue];
+      return {
+        locus: { id: l.id, gene: l.gene, region: `${l.chrom}:${l.start}-${l.end}`, strand: l.strand },
+        ltr: { name: l.ltrName, family: l.family, length_bp: l.ltrLenBp, rel_pos_kb: l.ltrRelPosKb, divergence_pct: l.divPct, age_mya: l.ageMya },
+        alu_control: { rel_pos_kb: l.aluControlRelKb, length_bp: l.aluLenBp },
+        tissue: state.currentTissue,
+        mode: state.experimentMode,
+        alphagenome: t,
+        caveat: l.caveatText
+      };
+    }
+
+    function loadSavedConfig() {
+      const saved = localStorage.getItem("RETROSWITCH_BACKEND");
+      if (saved) document.getElementById("backendUrlInput").value = saved;
+      document.getElementById("geminiApiKeyInput").value = state.geminiApiKey;
+    }
+
+    function saveApiConfig() {
+      state.geminiApiKey = document.getElementById("geminiApiKeyInput").value.trim();
+      localStorage.setItem("RETROSWITCH_GEMINI_KEY", state.geminiApiKey);
+      localStorage.setItem("RETROSWITCH_BACKEND", document.getElementById("backendUrlInput").value.trim());
+      toggleApiModal();
+      checkBackend();
+    }
+
+    let backendOk = false;
+    async function checkBackend() {
+      const base = document.getElementById("backendUrlInput").value.replace(/\/$/, "");
+      try {
+        const r = await fetch(`${base}/api/status`);
+        const j = await r.json();
+        backendOk = r.ok && j.gemini;
+      } catch (e) { backendOk = false; }
+      document.getElementById("apiStatusDot").className =
+        `w-2 h-2 rounded-full ${backendOk || state.geminiApiKey ? "bg-emerald-400" : "bg-amber-400"}`;
+    }
+
+    async function askGemini(question) {
+      const box = document.getElementById("geminiOutputBox");
+      box.innerHTML = `<p class="text-slate-400 mono">Asking Gemini…</p>`;
+      const body = {
+        systemInstruction: { parts: [{ text: "You are a genomics co-scientist. Answer ONLY from the AlphaGenome JSON payload provided. If the data does not support an answer, say so. Be concise (max 120 words). Note that predictions are model outputs, not wet-lab results." }] },
+        contents: [{ role: "user", parts: [{ text: `PAYLOAD:\n${JSON.stringify(buildGeminiPayload())}\n\nQUESTION: ${question}` }] }]
+      };
+      const base = document.getElementById("backendUrlInput").value.replace(/\/$/, "");
+      const direct = !!state.geminiApiKey;
+      const url = direct
+        ? "https://generativelanguage.googleapis.com/v1beta/models/gemini-4-argon:generateContent"
+        : `${base}/api/gemini`;
+      const headers = { "Content-Type": "application/json" };
+      if (direct) headers["x-goog-api-key"] = state.geminiApiKey;
+      try {
+        const r = await fetch(url, { method: "POST", headers, body: JSON.stringify(body) });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error?.message || r.statusText);
+        const text = j.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") || "(empty response)";
+        box.innerHTML = `<p class="text-cyan-300 mono text-[11px]">Q: ${md(question)}</p><p>${md(text).replace(/\n/g, "<br>")}</p>`;
+      } catch (e) {
+        box.innerHTML = `<p class="text-rose-400">Gemini request failed: ${md(String(e.message))}</p><p class="text-slate-500 text-[11px]">Run <code class="mono">python serve.py</code> (uses .env) or paste a key in API Keys &amp; Cache.</p>`;
+      }
+    }
+
+    function askGeminiCustom() {
+      const inp = document.getElementById("userQuestionInput");
+      const q = inp.value.trim();
+      if (!q) return;
+      inp.value = "";
+      askGemini(q);
+    }
+    function askPreset(q) { askGemini(q); }
+
+    /***************************************************************************
+     * 9. BOOT
+     ***************************************************************************/
+    window.addEventListener("load", () => {
+      initThreeJS();
+      loadSavedConfig();
+      refreshAll();
+      animate3D();
+      checkBackend();
+      window.addEventListener("resize", () => { drawGenomeTracks(); drawContactMap(); drawNullDistribution(); });
+    });
+  </script>
+</body>
+</html>
