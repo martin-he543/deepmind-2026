@@ -13,3 +13,5 @@ torch
 transformers
 google-genai
 streamlit
+alphagenome
+python-dotenv
